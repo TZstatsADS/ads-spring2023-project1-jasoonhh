@@ -24,8 +24,12 @@ output:
 1. Basic Information 
 * Length Analysis
 * Frequency Analysis
+
 2. Sentiment Analysis
 
+3. Emotional Analysis
+
+4. Topic Modeling
 
 \newpage
 
@@ -35,7 +39,7 @@ output:
 
 ## Length Analysis
 
-```{r, echo=FALSE, results='hide',  message=FALSE}
+```{r,  results='hide',  message=FALSE}
 library(dplyr)
 library(ggplot2)
 library(beeswarm)
@@ -47,10 +51,11 @@ library(tm)
 library(tidytext)
 library(wordcloud)
 library(forcats)
+library("topicmodels")
 ```
 
 
-```{r, echo=FALSE}
+```{r}
 df<-read.csv("~/philosophy_data.csv")
 Aristotle<-df%>%filter(df$school=="aristotle")
 Plato<-df%>%filter(df$school=="plato")
@@ -222,6 +227,8 @@ Plato_freq
 
 
 # Sentiment Analysis
+
+*Sentiment has three category which are negative, neutral and positive. By conducting the sentiment analysis, each sentence will be labeled the sentiment and the proportion of each category of sentiment can overall revel the main sentiment of each school. *
 ```{r, warning=FALSE}
 library(sentimentr)
 
@@ -271,6 +278,11 @@ pie(Plato_sentiment_summary$freq,
     main='Plato Sentiment')
 ```
 
+* *It is easy to find that the majority sentiment of Aristotle and Plato is Neutral which are 81.7% in Aristotle's and 74.8% in Plato's, and the positive statements in the explicitly biased statements always outnumber the negative statements in both schools. Consequently, the sentiment analysis can draw a conclusion that the sentiment characteristic of each school is mostly unbiased and is positive in the biased section.*
+
+# Emotional Analysis
+
+*Because of the majority sentiment of both schools is neutral, it is obvious that sentiment analysis alone is not enough to tell people about the characteristics of the two schools. Consequently, emotional analysis is conducted which detect the emotional rate of each word in sentences and label words with the sixteen category: anger, anticipation, disgust, fear, joy, sadness, surprise, trust and their negated part.*
 ```{r, warning=FALSE}
 Aristotle_emotion<-emotion_by(Aristotle$sentence_str)
 Plato_emotion<-emotion_by(Plato$sentence_str)
@@ -306,4 +318,10 @@ p2<-ggplot(Plato_emotion_summary, aes(x=Plato_emotion_summary$emotion_type, y=Pl
 
 p1+p2
 ```
+
+*From the summary of two schools, trust is major emotion of words in both schools which might be able to indicate both of two schools are making statement about what they believe. There is one difference that Aristotle's sentences contain more aniticipation words than joy words but Plato's sentences contain more joy words than aniticipation words. The major identical emotional aniticipation and minor emotion difference might be able to explain why Plato School initially originate from Aristotle school but finally evolve as a different brunch of philosophy. *
+
+# Conclusion 
+
+*As the oldest school and the only two philosophical schools named after people, Aristotle's School and Plato's School have very different characteristics in length but similar characteristics of word frequency. On the other hand, the two colleges share similar sentiment and emotional characteristics, neutral and trust, but also have slightly different emotional characteristics which is the rank of anticipation and joy. The difference might explains the difference of  their viewpoint. To understanding the detail of difference between their viewpoint, topic modeling might be needed in future project.* 
 
